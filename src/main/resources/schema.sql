@@ -35,4 +35,16 @@ CREATE TABLE position_points
     position int not null,
     points   int not null,
     primary key (position)
-)
+);
+
+ALTER TABLE driver
+    ADD FOREIGN KEY (team_id)
+        REFERENCES team (team_id);
+
+ALTER TABLE driver_weekend_result
+    ADD FOREIGN KEY (driver_id)
+        REFERENCES driver (driver_id);
+
+ALTER TABLE driver_weekend_result
+    ADD FOREIGN KEY (weekend_id)
+        REFERENCES weekend (weekend_id);
