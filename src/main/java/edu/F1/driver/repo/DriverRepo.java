@@ -11,7 +11,8 @@ import java.util.Map;
 @Repository
 public final class DriverRepo {
 
-    private final BeanPropertyRowMapper<DriverView> driverViewRowMapper = new BeanPropertyRowMapper<>(DriverView.class);
+    @Autowired
+    private BeanPropertyRowMapper<DriverView> driverViewRowMapper;
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -29,6 +30,7 @@ public final class DriverRepo {
                          LEFT JOIN driver_weekend_result ON driver.driver_id = driver_weekend_result.driver_id
                          LEFT JOIN position_points ON driver_weekend_result.position = position_points.position
                 GROUP BY driver.driver_id
+                ORDER BY points DESC
                 """;
         return jdbcTemplate.query(sql, driverViewRowMapper);
     }

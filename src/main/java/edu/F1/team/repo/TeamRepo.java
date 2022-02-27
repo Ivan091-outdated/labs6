@@ -11,7 +11,8 @@ import java.util.Map;
 @Repository
 public final class TeamRepo {
 
-    private final BeanPropertyRowMapper<TeamView> beanPropertyRowMapper = new BeanPropertyRowMapper<>(TeamView.class);
+    @Autowired
+    private BeanPropertyRowMapper<TeamView> beanPropertyRowMapper;
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -20,12 +21,13 @@ public final class TeamRepo {
         var sql = """
                 SELECT team.team_id,
                        team.name,
-                       SUM(position_points.points)
+                       SUM(position_points.points) as points
                 FROM team
                          LEFT JOIN driver ON driver.team_id = team.team_id
                          LEFT JOIN driver_weekend_result ON driver.driver_id = driver_weekend_result.driver_id
                          LEFT JOIN position_points ON position_points.position = driver_weekend_result.position
-                GROUP BY team.team_id;
+                GROUP BY team.team_id
+                ORDER BY points DESC
                 """;
         return jdbcTemplate.query(sql, beanPropertyRowMapper);
     }

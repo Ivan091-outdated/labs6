@@ -6,7 +6,7 @@ import lombok.With;
 
 @Value
 @With
-public final class TeamView {
+public class TeamView {
 
     Integer teamId;
 
