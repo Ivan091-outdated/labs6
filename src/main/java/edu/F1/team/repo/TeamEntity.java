@@ -1,11 +1,9 @@
 package edu.F1.team.repo;
 
-import lombok.Value;
-import lombok.With;
+import lombok.*;
 
 
-@Value
-@With
+@Data
 public class TeamEntity {
 
     Integer teamId;

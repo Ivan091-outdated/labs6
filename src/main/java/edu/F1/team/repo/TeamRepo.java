@@ -9,7 +9,7 @@ import java.util.Map;
 
 
 @Repository
-public final class TeamRepo {
+public class TeamRepo {
 
     @Autowired
     private BeanPropertyRowMapper<TeamView> beanPropertyRowMapper;

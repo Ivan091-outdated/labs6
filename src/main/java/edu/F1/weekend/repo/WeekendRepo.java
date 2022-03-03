@@ -9,7 +9,7 @@ import java.util.Map;
 
 
 @Repository
-public final class WeekendRepo {
+public class WeekendRepo {
 
     @Autowired
     private BeanPropertyRowMapper<WeekendView> beanPropertyRowMapper;

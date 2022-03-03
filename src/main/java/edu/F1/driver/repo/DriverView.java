@@ -1,14 +1,12 @@
 package edu.F1.driver.repo;
 
-import lombok.Value;
-import lombok.With;
+import lombok.*;
 
 
-@With
-@Value
+@Data
 public class DriverView {
 
-    Integer id;
+    Integer driverId;
 
     String name;
 

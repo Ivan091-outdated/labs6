@@ -1,1 +1,1 @@
-rootProject.name = "ssp_9"
+rootProject.name = "ssp_9,10"

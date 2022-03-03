@@ -1,5 +1,6 @@
 plugins {
     id("org.springframework.boot") version "2.5.5"
+    id("org.openjfx.javafxplugin") version "0.0.12"
     java
 }
 repositories {
@@ -17,11 +18,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("net.rgielen:javafx-weaver-spring-boot-starter:1.3.0")
 
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("org.apache.commons:commons-math3:3.6.1")
 
-    runtimeOnly("org.postgresql:h2:1.4.200")
+    implementation("com.h2database:h2:1.4.200")
 
     testImplementation("org.mockito:mockito-core")
     testImplementation("org.mockito:mockito-junit-jupiter")
@@ -38,6 +40,9 @@ dependencies {
 }
 tasks.test {
     useJUnitPlatform()
+}
+javafx {
+    modules("javafx.controls", "javafx.fxml")
 }
 tasks.processResources {
     dependsOn(tasks.compileJava)

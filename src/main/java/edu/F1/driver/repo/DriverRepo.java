@@ -9,7 +9,7 @@ import java.util.Map;
 
 
 @Repository
-public final class DriverRepo {
+public class DriverRepo {
 
     @Autowired
     private BeanPropertyRowMapper<DriverView> driverViewRowMapper;
@@ -23,7 +23,7 @@ public final class DriverRepo {
                        driver.name,
                        driver.number,
                        driver.team_id,
-                       team.name,
+                       team.name as team_name,
                        SUM(position_points.points) as points
                 FROM driver
                          LEFT JOIN team ON driver.team_id = team.team_id
@@ -42,7 +42,7 @@ public final class DriverRepo {
                 WHERE driver_id=:driver_id
                 """;
         var paramsMap = Map.<String, Object>of(
-                "driver_id", driverEntity.getId(),
+                "driver_id", driverEntity.getDriverId(),
                 "name", driverEntity.getName(),
                 "number", driverEntity.getNumber(),
                 "team_id", driverEntity.getTeamId());

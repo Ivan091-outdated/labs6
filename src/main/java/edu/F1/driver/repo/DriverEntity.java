@@ -3,11 +3,10 @@ package edu.F1.driver.repo;
 import lombok.*;
 
 
-@Value
-@With
+@Data
 public class DriverEntity {
 
-    Integer id;
+    Integer driverId;
 
     String name;
 
