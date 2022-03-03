@@ -1,4 +1,4 @@
-package edu.F1.driver.config;
+package edu.F1.config;
 
 import edu.F1.driver.repo.DriverView;
 import edu.F1.team.repo.TeamEntity;

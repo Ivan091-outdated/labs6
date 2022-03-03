@@ -4,6 +4,8 @@ import lombok.*;
 
 
 @Data
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class DriverView {
 
     Integer driverId;
@@ -16,5 +18,5 @@ public class DriverView {
 
     String teamName;
 
-    Integer points;
+    int points;
 }

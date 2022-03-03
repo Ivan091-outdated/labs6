@@ -1,12 +1,12 @@
 package edu.F1.weekend.repo;
 
-import lombok.Value;
-import lombok.With;
+import lombok.*;
 import java.time.LocalDate;
 
 
-@Value
-@With
+@Data
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class WeekendView {
 
     Integer weekendId;

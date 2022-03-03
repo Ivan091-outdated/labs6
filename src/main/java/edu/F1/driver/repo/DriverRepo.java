@@ -23,8 +23,8 @@ public class DriverRepo {
                        driver.name,
                        driver.number,
                        driver.team_id,
-                       team.name as team_name,
-                       SUM(position_points.points) as points
+                       team.name AS team_name,
+                       COALESCE(SUM(position_points.points), 0) AS points
                 FROM driver
                          LEFT JOIN team ON driver.team_id = team.team_id
                          LEFT JOIN driver_weekend_result ON driver.driver_id = driver_weekend_result.driver_id
@@ -56,6 +56,19 @@ public class DriverRepo {
                 """;
         var paramsMap = Map.<String, Object>of(
                 "driver_id", driverId);
+        jdbcTemplate.update(sql, paramsMap);
+    }
+
+    public void insert(DriverEntity entity) {
+        var sql = """
+                INSERT INTO driver(name, number, team_id)
+                VALUES (:name, :number, :team_id)
+                """;
+        var paramsMap = Map.<String, Object>of(
+                "name", entity.getName(),
+                "number", entity.getNumber(),
+                "team_id", entity.getTeamId()
+        );
         jdbcTemplate.update(sql, paramsMap);
     }
 }

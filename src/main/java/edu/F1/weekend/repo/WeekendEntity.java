@@ -5,6 +5,8 @@ import java.time.LocalDate;
 
 
 @Data
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class WeekendEntity {
 
     Integer weekendId;

@@ -4,6 +4,8 @@ import lombok.*;
 
 
 @Data
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class TeamEntity {
 
     Integer teamId;

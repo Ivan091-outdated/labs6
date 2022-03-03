@@ -4,6 +4,8 @@ import lombok.*;
 
 
 @Data
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class DriverEntity {
 
     Integer driverId;

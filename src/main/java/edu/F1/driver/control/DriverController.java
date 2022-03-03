@@ -1,23 +1,34 @@
 package edu.F1.driver.control;
 
-import edu.F1.driver.repo.DriverRepo;
-import edu.F1.driver.service.DriverConverter;
+import edu.F1.driver.control.view.DriverFxView;
+import edu.F1.driver.control.view.TeamFxView;
+import edu.F1.driver.repo.*;
+import edu.F1.driver.service.DriverViewToFxViewConverter;
 import edu.F1.team.repo.TeamRepo;
 import edu.F1.team.repo.TeamView;
+import edu.F1.team.service.TeamService;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
+import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import java.awt.event.KeyEvent;
+import org.springframework.stereotype.Controller;
+import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
-@Component
+@Controller
 public class DriverController {
 
     @FXML
@@ -30,7 +41,7 @@ public class DriverController {
     public TableColumn<DriverFxView, Number> driverPoints;
 
     @FXML
-    public TableColumn<DriverFxView, String> driverTeamName;
+    public TableColumn<DriverFxView, TeamFxView> driverTeamName;
 
     @FXML
     private TableView<DriverFxView> driverTable;
@@ -39,13 +50,29 @@ public class DriverController {
     private DriverRepo driverRepo;
 
     @Autowired
-    private TeamRepo teamRepo;
+    private Function<DriverView, DriverFxView> toFxViewConverter;
 
     @Autowired
-    private DriverConverter driverConverter;
+    private Function<DriverFxView, DriverEntity> toEntityConverter;
+
+    @Autowired
+    private StringConverter<TeamFxView> teamFxViewStringConverter;
+
+    @Autowired
+    private TeamService teamService;
+
+    @Autowired
+    private FxWeaver fxWeaver;
+
+    private ObservableList<DriverFxView> driverData;
+
+    private ObservableList<TeamFxView> teamNames;
 
     @FXML
     public void initialize() {
+        driverData = FXCollections.observableList(fetchData());
+        teamNames = FXCollections.observableList(teamService.fetchTeamData());
+
         driverName.setCellFactory(TextFieldTableCell.forTableColumn());
         driverName.setCellValueFactory(x -> x.getValue().nameProperty());
 
@@ -54,26 +81,15 @@ public class DriverController {
 
         driverPoints.setCellValueFactory(x -> x.getValue().pointsProperty());
 
-        var teams = FXCollections.observableList(teamRepo.findAll().stream().map(TeamView::getName).toList());
-        driverTeamName.setCellFactory(ComboBoxTableCell.forTableColumn(teams));
-        driverTeamName.setCellValueFactory(x -> x.getValue().teamNameProperty());
-        var data = FXCollections.observableList(driverRepo.findAll().stream().map(x -> driverConverter.viewToFx(x)).collect(Collectors.toList()));
-
-        driverTable.setItems(data);
-
-        driverTable.setOnKeyPressed(e -> {
-            if (e.getCode().getCode() == KeyCode.DELETE.getCode()) {
-                var selectedItem = driverTable.getSelectionModel().getSelectedItem();
-                driverTable.getItems().remove(selectedItem);
-                driverRepo.delete(selectedItem.getDriverId());
-            }
-        });
+        driverTeamName.setCellFactory(ComboBoxTableCell.forTableColumn(teamFxViewStringConverter, teamNames));
+        driverTeamName.setCellValueFactory(x -> x.getValue().teamFxViewProperty());
+        driverTable.setItems(driverData);
     }
 
     @FXML
     public void onEditDriverName(TableColumn.CellEditEvent<DriverFxView, String> event){
-        var d = event.getRowValue();
-        var entity = driverConverter.fxToEntity(d);
+        var driver = event.getRowValue();
+        var entity = toEntityConverter.apply(driver);
         entity.setName(event.getNewValue());
         driverRepo.update(entity);
     }
@@ -81,17 +97,44 @@ public class DriverController {
     @FXML
     public void onEditDriverNumber(TableColumn.CellEditEvent<DriverFxView, Number> event){
         var d = event.getRowValue();
-        var entity = driverConverter.fxToEntity(d);
+        var entity = toEntityConverter.apply(d);
         entity.setNumber(event.getNewValue().intValue());
         driverRepo.update(entity);
     }
 
     @FXML
-    public void onEditDriverTeamName(TableColumn.CellEditEvent<DriverFxView, String> event){
-        var n = event.getNewValue();
-        var team = teamRepo.findByName(n);
-        var entity = driverConverter.fxToEntity(event.getRowValue());
-        entity.setTeamId(team.getTeamId());
+    public void onEditDriverTeamName(TableColumn.CellEditEvent<DriverFxView, TeamFxView> event){
+        var newTeamId = event.getNewValue();
+        var entity = toEntityConverter.apply(event.getRowValue());
+        entity.setTeamId(newTeamId.getTeamId());
         driverRepo.update(entity);
+    }
+
+    @FXML
+    public void onDelete(KeyEvent e) {
+        if (e.getCode() == KeyCode.DELETE) {
+            var selectedItem = driverTable.getSelectionModel().getSelectedItem();
+            driverTable.getItems().remove(selectedItem);
+            driverRepo.delete(selectedItem.getDriverId());
+        }
+    }
+
+    @FXML
+    public void refillTable(){
+        driverData.setAll(fetchData());
+        teamNames.setAll(teamService.fetchTeamData());
+    }
+
+    @FXML
+    public void add(){
+        Parent parent = fxWeaver.loadView(DriverAddNewController.class);
+        var stage = new Stage();
+        var scene = new Scene(parent);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private List<DriverFxView> fetchData(){
+        return driverRepo.findAll().stream().map(toFxViewConverter).collect(Collectors.toList());
     }
 }

@@ -8,12 +8,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import java.util.function.Supplier;
 
 
 @Component
@@ -24,7 +21,6 @@ public class FXApplication extends Application {
 
     @Autowired
     private FxWeaver fxWeaver;
-
 
     @Override
     public void init() {

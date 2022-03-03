@@ -1,5 +1,6 @@
-package edu.F1.driver.control;
+package edu.F1.driver.control.view;
 
+import edu.F1.driver.control.view.TeamFxView;
 import javafx.beans.property.*;
 
 
@@ -11,11 +12,13 @@ public class DriverFxView {
 
     private final IntegerProperty number = new SimpleIntegerProperty();
 
-    private final IntegerProperty teamId = new SimpleIntegerProperty();
-
-    private final StringProperty teamName = new SimpleStringProperty();
+    private final ObjectProperty<TeamFxView> teamFxView = new SimpleObjectProperty<>(new TeamFxView());
 
     private final IntegerProperty points = new SimpleIntegerProperty();
+
+    public ObjectProperty<TeamFxView> teamFxViewProperty() {
+        return teamFxView;
+    }
 
     public IntegerProperty driverIdProperty() {
         return driverId;
@@ -29,16 +32,16 @@ public class DriverFxView {
         return number;
     }
 
-    public IntegerProperty teamIdProperty() {
-        return teamId;
-    }
-
-    public StringProperty teamNameProperty() {
-        return teamName;
-    }
-
     public IntegerProperty pointsProperty() {
         return points;
+    }
+
+    public TeamFxView getTeamFxView() {
+        return this.teamFxView.get();
+    }
+
+    public void setTeamFxView(TeamFxView teamFxView) {
+        this.teamFxView.set(teamFxView);
     }
 
     public int getDriverId() {
@@ -63,22 +66,6 @@ public class DriverFxView {
 
     public void setNumber(int number) {
         this.number.set(number);
-    }
-
-    public int getTeamId() {
-        return teamId.get();
-    }
-
-    public void setTeamId(int teamId) {
-        this.teamId.set(teamId);
-    }
-
-    public String getTeamName() {
-        return teamName.get();
-    }
-
-    public void setTeamName(String teamName) {
-        this.teamName.set(teamName);
     }
 
     public int getPoints() {

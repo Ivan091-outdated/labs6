@@ -35,19 +35,6 @@ public class TeamRepo {
         return jdbcTemplate.query(sql, beanPropertyRowMapper);
     }
 
-    public TeamEntity findByName(String name) {
-        var sql = """
-                SELECT team.team_id,
-                       team.name
-                FROM team
-                WHERE team.name = :name
-                """;
-        var paramsMap = Map.<String, Object>of(
-                "name", name
-        );
-        return jdbcTemplate.queryForObject(sql, paramsMap, teamEntityRowMapper);
-    }
-
     public void update(TeamEntity teamEntity) {
         var sql = """
                 UPDATE team
