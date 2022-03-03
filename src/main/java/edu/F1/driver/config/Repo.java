@@ -1,6 +1,7 @@
-package edu.F1.config;
+package edu.F1.driver.config;
 
 import edu.F1.driver.repo.DriverView;
+import edu.F1.team.repo.TeamEntity;
 import edu.F1.team.repo.TeamView;
 import edu.F1.weekend.repo.WeekendView;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,11 @@ public class Repo {
     @Bean
     public BeanPropertyRowMapper<TeamView> teamViewRowMapper() {
         return new BeanPropertyRowMapper<>(TeamView.class);
+    }
+
+    @Bean
+    public BeanPropertyRowMapper<TeamEntity> teamEntityRowMapper() {
+        return new BeanPropertyRowMapper<>(TeamEntity.class);
     }
 
     @Bean

@@ -15,13 +15,16 @@ public class TeamRepo {
     private BeanPropertyRowMapper<TeamView> beanPropertyRowMapper;
 
     @Autowired
+    private BeanPropertyRowMapper<TeamEntity> teamEntityRowMapper;
+
+    @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     public List<TeamView> findAll() {
         var sql = """
                 SELECT team.team_id,
                        team.name,
-                       SUM(position_points.points) as points
+                       SUM(position_points.points) AS points
                 FROM team
                          LEFT JOIN driver ON driver.team_id = team.team_id
                          LEFT JOIN driver_weekend_result ON driver.driver_id = driver_weekend_result.driver_id
@@ -30,6 +33,19 @@ public class TeamRepo {
                 ORDER BY points DESC
                 """;
         return jdbcTemplate.query(sql, beanPropertyRowMapper);
+    }
+
+    public TeamEntity findByName(String name) {
+        var sql = """
+                SELECT team.team_id,
+                       team.name
+                FROM team
+                WHERE team.name = :name
+                """;
+        var paramsMap = Map.<String, Object>of(
+                "name", name
+        );
+        return jdbcTemplate.queryForObject(sql, paramsMap, teamEntityRowMapper);
     }
 
     public void update(TeamEntity teamEntity) {

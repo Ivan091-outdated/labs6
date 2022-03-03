@@ -43,7 +43,8 @@ ALTER TABLE driver
 
 ALTER TABLE driver_weekend_result
     ADD FOREIGN KEY (driver_id)
-        REFERENCES driver (driver_id);
+        REFERENCES driver (driver_id)
+        ON DELETE CASCADE;
 
 ALTER TABLE driver_weekend_result
     ADD FOREIGN KEY (weekend_id)

@@ -1,28 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<GridPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.F1.driver.control.DriverController">
-    <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-    </rowConstraints>
-    <TableView fx:id="driverTable" editable="true">
-        <columns>
-            <TableColumn fx:id="driverName" prefWidth="75.0" text="Name" />
-            <TableColumn fx:id="driverNumber" prefWidth="75.0" text="Number" />
-            <TableColumn fx:id="driverTeamName" prefWidth="75.0" text="Team Name" />
-            <TableColumn fx:id="driverPoints" prefWidth="75.0" text="Points" />
-        </columns>
-        <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-        </columnResizePolicy>
-        <opaqueInsets>
-         <Insets />
-        </opaqueInsets>
-    </TableView>
+<GridPane prefHeight="468.0" prefWidth="708.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.F1.driver.control.DriverController">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <children>
+       <TableView fx:id="driverTable" editable="true" prefHeight="808.0" prefWidth="1023.0">
+           <columns>
+               <TableColumn fx:id="driverName" onEditCommit="#onEditDriverName" prefWidth="75.0" text="Name" />
+               <TableColumn fx:id="driverNumber" onEditCommit="#onEditDriverNumber" prefWidth="181.0" text="Number" />
+               <TableColumn fx:id="driverTeamName" onEditCommit="#onEditDriverTeamName" prefWidth="172.0" text="Team Name" />
+               <TableColumn fx:id="driverPoints" editable="false" prefWidth="75.0" text="Points" />
+           </columns>
+           <columnResizePolicy>
+               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+           </columnResizePolicy>
+           <opaqueInsets>
+            <Insets />
+           </opaqueInsets>
+       </TableView>
+   </children>
 </GridPane>
