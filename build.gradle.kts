@@ -19,7 +19,11 @@ dependencies {
     testCompileOnly(projectLombok)
     testAnnotationProcessor(projectLombok)
 }
+java{
+    version = 17
+}
 tasks.test {
+    enableAssertions = true
     useJUnitPlatform()
 }
 tasks.processResources {
