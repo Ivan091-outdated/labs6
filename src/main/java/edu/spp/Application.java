@@ -67,6 +67,10 @@ public final class Application {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
             try {
                 if (semaphore.availablePermits() > 0){
                     pauseButton.setEnabled(false);
@@ -76,10 +80,6 @@ public final class Application {
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
         }
 
         @Override
@@ -99,15 +99,15 @@ public final class Application {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
             if (semaphore.availablePermits() == 0){
                 pauseButton.setEnabled(true);
                 resumeButton.setEnabled(false);
                 semaphore.release();
             }
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
         }
 
         @Override
