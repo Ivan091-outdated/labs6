@@ -1,4 +1,5 @@
 spring:
+#  use "jdbc:h2:tcp://localhost/mem:public” for external connections
   datasource:
     url: jdbc:h2:mem:public;
     username: sa
