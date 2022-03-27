@@ -1,4 +1,4 @@
-package edu.game;
+package game;
 
 public enum Turn {
     P1,
