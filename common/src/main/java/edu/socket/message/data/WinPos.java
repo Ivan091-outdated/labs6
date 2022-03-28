@@ -11,17 +11,13 @@ import java.io.Serializable;
 public class WinPos implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = -2951714289268192466L;
+    private static final long serialVersionUID = -884317228912576731L;
 
-    int pos1;
-
-    int pos2;
-
-    int pos3;
+    int[] poss;
 
     Field field;
 
     public static WinPos ofVictorySet(VictorySet victorySet, Field field){
-        return new WinPos(victorySet.getPos1(), victorySet.getPos2(), victorySet.getPos3(), field);
+        return new WinPos(new int[]{victorySet.getPos1(), victorySet.getPos2(), victorySet.getPos3()}, field);
     }
 }

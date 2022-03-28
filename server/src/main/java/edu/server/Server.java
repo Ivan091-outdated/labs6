@@ -29,7 +29,7 @@ public class Server {
         var gameGoing = true;
         while (gameGoing) {
             var victorySet = game.winner();
-            switch (victorySet.getPaint()){
+            switch (victorySet.getWinner()){
                 case CROSS -> {
                     game.getCrossPlayer().writeMessage(Action.YOU_WON, WinPos.ofVictorySet(victorySet, game.getField()));
                     game.getCirclePlayer().writeMessage(Action.YOU_LOST, WinPos.ofVictorySet(victorySet, game.getField()));
@@ -40,12 +40,19 @@ public class Server {
                     game.getCirclePlayer().writeMessage(Action.YOU_WON, WinPos.ofVictorySet(victorySet, game.getField()));
                     gameGoing = false;
                 }
+                case DRAW -> {
+                    game.getCrossPlayer().writeMessage(Action.DRAW, game.getField());
+                    game.getCirclePlayer().writeMessage(Action.DRAW, game.getField());
+                    gameGoing = false;
+                }
                 case NONE -> {
                     handleTurn();
                     log.info("Turn handled");
                 }
             }
         }
+        game.getCirclePlayer().close();
+        game.getCrossPlayer().close();
     }
 
     private void handleTurn(){

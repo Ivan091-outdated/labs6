@@ -9,7 +9,8 @@ public enum Action {
     YOUR_TURN(Field.class),
     TURN_MADE(TurnMade.class),
     YOU_WON(WinPos.class),
-    YOU_LOST(WinPos.class);
+    YOU_LOST(WinPos.class),
+    DRAW(Field.class);
 
     public final Class<?> aClass;
 

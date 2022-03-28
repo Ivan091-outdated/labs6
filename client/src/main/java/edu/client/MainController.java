@@ -11,8 +11,10 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import java.util.Arrays;
 
 
 @Controller
@@ -49,8 +51,10 @@ public class MainController {
         grid.setDisable(true);
     }
 
+    @SneakyThrows
     private void gameLoop() {
-        while (true) {
+        var gameGoing = true;
+        while (gameGoing) {
             var message = io.readMessage();
             var data = message.getData();
             switch (message.getAction()) {
@@ -69,19 +73,24 @@ public class MainController {
                     var field = castedData.getField();
                     Platform.runLater(new FieldMapper(field));
                     Platform.runLater(new Victory(castedData));
-                    return;
+                    gameGoing = false;
                 }
                 case YOU_LOST -> {
                     var castedData = (WinPos) data;
                     var field = castedData.getField();
                     Platform.runLater(new FieldMapper(field));
                     Platform.runLater(new Loss(castedData));
-                    return;
+                    gameGoing = false;
                 }
-                default -> {
+                case DRAW -> {
+                    Platform.runLater(new FieldMapper((Field) data));
+                    Platform.runLater(new Draw());
+                    gameGoing = false;
                 }
+                case TURN_MADE -> {}
             }
         }
+        io.close();
     }
 
     @AllArgsConstructor
@@ -91,9 +100,8 @@ public class MainController {
 
         @Override
         public void run() {
-            buttons[victorySet.getPos1()].setStyle("-fx-background-color: red");
-            buttons[victorySet.getPos2()].setStyle("-fx-background-color: red");
-            buttons[victorySet.getPos3()].setStyle("-fx-background-color: red");
+            Arrays.stream(victorySet.getPoss())
+                    .forEach(i -> buttons[i].setStyle("-fx-background-color: red"));
         }
     }
 
@@ -104,20 +112,30 @@ public class MainController {
 
         @Override
         public void run() {
-            buttons[victorySet.getPos1()].setStyle("-fx-background-color: green");
-            buttons[victorySet.getPos2()].setStyle("-fx-background-color: green");
-            buttons[victorySet.getPos3()].setStyle("-fx-background-color: green");
+            Arrays.stream(victorySet.getPoss())
+                    .forEach(i -> buttons[i].setStyle("-fx-background-color: green"));
+        }
+    }
+
+    @AllArgsConstructor
+    private class Draw implements Runnable {
+
+        @Override
+        public void run() {
+            Arrays.stream(buttons)
+                    .forEach(x -> x.setStyle("-fx-background-color: yellow"));
         }
     }
 
     @AllArgsConstructor
     private class FieldMapper implements Runnable {
+
         Field field;
 
         @Override
         public void run() {
             var state = field.getFieldState();
-            for (var i = 0; i < 9; i++) {
+            for (var i = 0; i < buttons.length; i++) {
                 switch (state[i]) {
                     case CROSS -> {
                         buttons[i].setText("X");

@@ -6,7 +6,7 @@ import lombok.Value;
 @Value
 public class VictorySet {
 
-    Paint paint;
+    Winner winner;
 
     int pos1;
 
