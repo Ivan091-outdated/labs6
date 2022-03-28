@@ -1,29 +1,24 @@
 package edu;
 
-import edu.socket.SocketReader;
+import edu.socket.SocketIO;
+import edu.socket.message.Action;
+import edu.socket.message.data.InitGameData;
+import edu.socket.message.data.TurnMade;
+import game.Field;
+import game.Paint;
+import javafx.application.Application;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import java.net.Socket;
 
 
 @SpringBootApplication
 @Slf4j
-public class ApplicationClient implements CommandLineRunner {
+public class ApplicationClient {
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(ApplicationClient.class).run(args);
-    }
-
-    @Override
-    @SneakyThrows
-    public void run(String... args) {
-        var socket = new Socket("localhost", 6666);
-        var reader = new SocketReader(socket);
-        while (true){
-            log.info("{}", reader.readObject().toString());
-        }
+        Application.launch(FXApplication.class);
     }
 }

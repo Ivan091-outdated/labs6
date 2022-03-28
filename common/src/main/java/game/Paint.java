@@ -1,7 +1,7 @@
 package game;
 
-public enum CellState {
+public enum Paint {
     CROSS,
     CIRCLE,
-    NONE
+    NONE;
 }
